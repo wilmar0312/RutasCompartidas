@@ -1,0 +1,6 @@
+@RutasCompartidas.Api_HostAddress = http://localhost:5018
+
+GET {{RutasCompartidas.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RutasCompartidas.Domain", "RutasCompartidas.Domain\RutasCompartidas.Domain.csproj", "{6A839061-68BF-41A5-B8B5-5539A148A255}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RutasCompartidas.Infrastructure", "RutasCompartidas.Infrastructure\RutasCompartidas.Infrastructure.csproj", "{7D480C99-A807-4699-AEB4-1CB551A83115}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RutasCompartidas.Application", "RutasCompartidas.Application\RutasCompartidas.Application.csproj", "{76CD75AF-6AB1-45EC-81D3-51955B613811}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RutasCompartidas.Web", "RutasCompartidas.Web\RutasCompartidas.Web.csproj", "{1E28CE0A-3546-4A92-BC5F-7C612305D422}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RutasCompartidas.Api", "RutasCompartidas.Api\RutasCompartidas.Api.csproj", "{26B62273-E48D-43CF-AEE1-CFF0FE90D8F0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6A839061-68BF-41A5-B8B5-5539A148A255}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A839061-68BF-41A5-B8B5-5539A148A255}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A839061-68BF-41A5-B8B5-5539A148A255}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A839061-68BF-41A5-B8B5-5539A148A255}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D480C99-A807-4699-AEB4-1CB551A83115}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D480C99-A807-4699-AEB4-1CB551A83115}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D480C99-A807-4699-AEB4-1CB551A83115}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D480C99-A807-4699-AEB4-1CB551A83115}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76CD75AF-6AB1-45EC-81D3-51955B613811}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76CD75AF-6AB1-45EC-81D3-51955B613811}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76CD75AF-6AB1-45EC-81D3-51955B613811}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76CD75AF-6AB1-45EC-81D3-51955B613811}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E28CE0A-3546-4A92-BC5F-7C612305D422}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E28CE0A-3546-4A92-BC5F-7C612305D422}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E28CE0A-3546-4A92-BC5F-7C612305D422}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E28CE0A-3546-4A92-BC5F-7C612305D422}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26B62273-E48D-43CF-AEE1-CFF0FE90D8F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26B62273-E48D-43CF-AEE1-CFF0FE90D8F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26B62273-E48D-43CF-AEE1-CFF0FE90D8F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26B62273-E48D-43CF-AEE1-CFF0FE90D8F0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
