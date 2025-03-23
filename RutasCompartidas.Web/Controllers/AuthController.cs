@@ -17,14 +17,14 @@ namespace RutasCompartidas.Web.Controllers
             return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Login(string email, string password)
+      [HttpPost]
+    public async Task<IActionResult> Login(string email, string password)
+    {
+        var user = await _authService.LoginAsync(email, password);
+        if (user != null)
         {
-            var user = await _authService.LoginAsync(email, password);
-            if (user != null)
-            {
-                HttpContext.Session.SetString("UserId", user.Id.ToString());
-                HttpContext.Session.SetString("UserRole", user.Rol);
+            HttpContext.Session.SetString("UserId", user.Id.ToString());
+            HttpContext.Session.SetString("UserRole", user.Rol);
 
             // 📌 Si el usuario es Conductor, lo redirige a la página de gestión de rutas
             if (user.Rol == "Conductor")
@@ -34,11 +34,12 @@ namespace RutasCompartidas.Web.Controllers
 
             // 📌 Si el usuario es Pasajero, lo redirige a ver las rutas disponibles
             return RedirectToAction("Index", "Ruta");
-            }
-
-            ViewBag.Error = "Credenciales incorrectas";
-            return View();
         }
+
+        ViewBag.Error = "Credenciales incorrectas";
+        return View();
+    }
+
 
         public IActionResult Logout()
         {
