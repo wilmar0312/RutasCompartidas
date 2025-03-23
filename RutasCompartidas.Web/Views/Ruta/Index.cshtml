@@ -1,0 +1,37 @@
+﻿@model List<RutasCompartidas.Domain.Entities.Ruta>
+
+<h2>Listado de Rutas</h2>
+
+<table>
+    <tr>
+        <th>Origen</th>
+        <th>Destino</th>
+        <th>Descripción</th>
+        <th>Fecha</th>
+        <th>Conductor</th>
+        <th>Acciones</th>
+    </tr>
+    @foreach (var ruta in Model)
+    {
+        <tr>
+            <td>@ruta.Origen</td>
+            <td>@ruta.Destino</td>
+            <td>@ruta.Descripcion</td>
+            <td>@ruta.FechaHora.ToString("dd/MM/yyyy HH:mm")</td>
+            <td>@(ruta.Conductor?.Nombre ?? "Desconocido")</td>
+            <td>
+                @if (Context.Session.GetString("UserRole") == "Conductor")
+                {
+                    <a href="/Ruta/Editar/@ruta.Id">Editar</a>
+ 
+             <a href = "/Ruta/Eliminar/@ruta.Id" > Eliminar </a>
+               }
+            </td>
+        </tr>
+    }
+</table>
+
+@if (Context.Session.GetString("UserRole") == "Conductor")
+{
+    <a href="/Ruta/Crear">Crear Nueva Ruta</a>
+}

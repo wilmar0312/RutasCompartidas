@@ -12,6 +12,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Registrar el servicio AuthService
 builder.Services.AddScoped<RutasCompartidas.Application.Services.AuthService>();
 
+// Registrar el servicio RutaService
+builder.Services.AddScoped<RutasCompartidas.Application.Services.RutaService>();
+
 // Configurar sesiones
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
