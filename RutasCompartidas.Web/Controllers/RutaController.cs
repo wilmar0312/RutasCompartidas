@@ -39,17 +39,17 @@ namespace RutasCompartidas.Web.Controllers
         }
 
         // 📌 Vista para editar una ruta (Solo conductores)
+        public async Task<IActionResult> Editar(int id)
+        {
+            var ruta = await _rutaService.ObtenerRutaPorIdAsync(id);
+            if (ruta == null) return NotFound();
+
+            return View(ruta);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Editar(Ruta ruta)
         {
-            // Obtener la ruta original
-            var rutaOriginal = await _rutaService.ObtenerRutaPorIdAsync(ruta.Id);
-            if (rutaOriginal == null) return NotFound();
-
-            // Mantener el ConductorId original
-            ruta.ConductorId = rutaOriginal.ConductorId;
-
-            // Actualizar la ruta
             await _rutaService.ActualizarRutaAsync(ruta);
             return RedirectToAction("Index");
         }

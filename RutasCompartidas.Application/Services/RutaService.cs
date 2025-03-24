@@ -47,8 +47,8 @@ namespace RutasCompartidas.Application.Services
                 rutaExistente.FechaHora = ruta.FechaHora;
                 // No modificamos rutaExistente.ConductorId
 
-            await _context.SaveChangesAsync();
-        }
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task EliminarRutaAsync(int id)
