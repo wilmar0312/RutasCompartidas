@@ -37,8 +37,18 @@ namespace RutasCompartidas.Application.Services
 
         public async Task ActualizarRutaAsync(Ruta ruta)
         {
-            _context.Rutas.Update(ruta);
+            var rutaExistente = await _context.Rutas.FindAsync(ruta.Id);
+            if (rutaExistente != null)
+            {
+                // Actualizar solo los campos que deben cambiar
+                rutaExistente.Origen = ruta.Origen;
+                rutaExistente.Destino = ruta.Destino;
+                rutaExistente.Descripcion = ruta.Descripcion;
+                rutaExistente.FechaHora = ruta.FechaHora;
+                // No modificamos rutaExistente.ConductorId
+
             await _context.SaveChangesAsync();
+        }
         }
 
         public async Task EliminarRutaAsync(int id)
