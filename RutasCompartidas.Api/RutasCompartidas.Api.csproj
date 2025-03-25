@@ -10,4 +10,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\RutasCompartidas.Application\RutasCompartidas.Application.csproj" />
+    <ProjectReference Include="..\RutasCompartidas.Infrastructure\RutasCompartidas.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
