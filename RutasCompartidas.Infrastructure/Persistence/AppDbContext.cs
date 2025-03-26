@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RutasCompartidas.Domain.Entities;
 
+
 namespace RutasCompartidas.Infrastructure.Persistence
 {
     public class AppDbContext : DbContext
