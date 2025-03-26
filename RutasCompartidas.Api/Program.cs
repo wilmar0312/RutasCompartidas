@@ -4,9 +4,11 @@ using RutasCompartidas.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configurar conexión a SQL Server
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<RutasCompartidas.Infrastructure.Persistence.RutasCompartidasContext>(options =>
+    builder.Services.AddDbContext<RutasCompartidas.Infrastructure.Persistence.RutasCompartidasContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("RutasCompartidasStrConnection") ?? throw new InvalidOperationException("Connection string 'RutasCompartidasContext' not found."))));
+//// Configurar conexión a SQL Server
+//builder.Services.AddDbContext<AppDbContext>(options =>
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Registrar servicios de aplicación
 builder.Services.AddScoped<AuthService>();

@@ -1,68 +1,127 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RutasCompartidas.Application.Services;
+using Microsoft.EntityFrameworkCore;
 using RutasCompartidas.Domain.Entities;
+using RutasCompartidas.Infrastructure.Persistence;
 
-namespace RutasCompartidas.Api.Controllers
+namespace RutasCompartidas.Api.Controllers;
+
+[ApiController]
+[Route("[controller]")]
+public class RutaController : ControllerBase
 {
-    [Route("api/rutas")]
-    [ApiController]
-    public class RutaController : ControllerBase
+    private readonly Infrastructure.Persistence.RutasCompartidasContext _context;
+
+    public RutaController(Infrastructure.Persistence.RutasCompartidasContext context)
     {
-        private readonly RutaService _rutaService;
+        _context = context;
+    }
 
-        public RutaController(RutaService rutaService)
+    // 📌 Obtener todas las rutas
+    [HttpGet("GetAll")]
+    public async Task<IActionResult> GetAll(string filter = "")
+    {
+        var rutas = await _context.Rutas.ToListAsync();
+
+        var list = rutas.Select(ruta => new RutaDto
         {
-            _rutaService = rutaService;
+            Id = ruta.Id,
+            Origen = ruta.Origen,
+            Destino = ruta.Destino,
+            FechaHora = ruta.FechaHora,
+            ConductorId = ruta.ConductorId
+        }).ToList();
+
+        return Ok(list);
+    }
+
+    // 📌 Obtener una ruta por ID
+    [HttpGet("Get/{id}")]
+    public async Task<IActionResult> Get(int id)
+    {
+        var ruta = await _context.Rutas.FindAsync(id);
+        if (ruta == null)
+        {
+            return BadRequest("Ruta no encontrada");
         }
 
-        // 📌 Obtener todas las rutas
-        [HttpGet]
-        public async Task<IActionResult> GetRutas()
+        var dto = new RutaDto
         {
-            var rutas = await _rutaService.ObtenerRutasAsync();
-            return Ok(rutas);
+            Id = ruta.Id,
+            Origen = ruta.Origen,
+            Destino = ruta.Destino,
+            FechaHora = ruta.FechaHora,
+            ConductorId = ruta.ConductorId
+        };
+
+        return Ok(dto);
+    }
+
+    // 📌 Crear una nueva ruta (Solo conductores)
+    [HttpPost("Add")]
+    public async Task<IActionResult> Create([FromBody] RutaDto dto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest("Datos inválidos");
         }
 
-        // 📌 Obtener una ruta por ID
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetRuta(int id)
+        var ruta = new Ruta
         {
-            var ruta = await _rutaService.ObtenerRutaPorIdAsync(id);
-            if (ruta == null) return NotFound();
+            Origen = dto.Origen,
+            Destino = dto.Destino,
+            FechaHora = dto.FechaHora,
+            ConductorId = dto.ConductorId
+        };
 
-            return Ok(ruta);
+        _context.Rutas.Add(ruta);
+        await _context.SaveChangesAsync();
+        return Ok(new { success = true, message = "Ruta creada con éxito!" });
+    }
+
+    // 📌 Editar una ruta (Solo conductores)
+    [HttpPut("Update")]
+    public async Task<IActionResult> Update([FromBody] RutaDto dto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest("Datos inválidos");
         }
 
-        // 📌 Crear una nueva ruta (Solo conductores)
-        [HttpPost]
-        public async Task<IActionResult> CrearRuta([FromBody] Ruta ruta)
+        var ruta = await _context.Rutas.FindAsync(dto.Id);
+        if (ruta == null)
         {
-            if (ruta.ConductorId == 0)
-                return BadRequest("El ConductorId es obligatorio.");
-
-            await _rutaService.AgregarRutaAsync(ruta);
-            return CreatedAtAction(nameof(GetRuta), new { id = ruta.Id }, ruta);
+            return BadRequest("Ruta no encontrada");
         }
 
-        // 📌 Editar una ruta (Solo conductores)
-        [HttpPut("{id}")]
-        public async Task<IActionResult> EditarRuta(int id, [FromBody] Ruta ruta)
+        ruta.Origen = dto.Origen;
+        ruta.Destino = dto.Destino;
+        ruta.FechaHora = dto.FechaHora;
+
+        try
         {
-            var rutaExistente = await _rutaService.ObtenerRutaPorIdAsync(id);
-            if (rutaExistente == null) return NotFound();
-
-            ruta.ConductorId = rutaExistente.ConductorId; // Mantener el conductor original
-
-            await _rutaService.ActualizarRutaAsync(ruta);
-            return NoContent();
+            _context.Update(ruta);
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            return BadRequest("Error al actualizar la ruta");
         }
 
-        // 📌 Eliminar una ruta (Solo conductores)
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> EliminarRuta(int id)
+        return Ok(new { success = true, message = "Ruta actualizada con éxito!" });
+    }
+
+    // 📌 Eliminar una ruta (Solo conductores)
+    [HttpDelete("Delete/{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var ruta = await _context.Rutas.FindAsync(id);
+        if (ruta == null)
         {
-            await _rutaService.EliminarRutaAsync(id);
-            return NoContent();
+            return BadRequest("Ruta no encontrada");
         }
+
+        _context.Rutas.Remove(ruta);
+        await _context.SaveChangesAsync();
+        return Ok(new { success = true, message = "Ruta eliminada con éxito!" });
     }
 }

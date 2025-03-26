@@ -4,8 +4,9 @@ using RutasCompartidas.Domain.Entities;
 
 namespace RutasCompartidas.Api.Controllers
 {
-    [Route("api/auth")]
     [ApiController]
+    [Route("[controller]")]
+    
     public class AuthController : ControllerBase
     {
         private readonly AuthService _authService;
@@ -15,11 +16,16 @@ namespace RutasCompartidas.Api.Controllers
             _authService = authService;
         }
 
+        // 📌 Endpoint para iniciar sesión
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] Usuario usuario)
+        public async Task<IActionResult> Login([FromBody] UsuarioDto usuario)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(new { message = "Datos inválidos" });
+
             var user = await _authService.LoginAsync(usuario.Email, usuario.Password);
-            if (user == null) return Unauthorized(new { message = "Credenciales incorrectas" });
+            if (user == null)
+                return Unauthorized(new { message = "Credenciales incorrectas" });
 
             return Ok(new
             {
