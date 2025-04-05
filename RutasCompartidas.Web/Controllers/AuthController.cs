@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RutasCompartidas.Application.Services;
+using RutasCompartidas.Domain.Entities;
 
 namespace RutasCompartidas.Web.Controllers
 {
@@ -44,6 +45,26 @@ namespace RutasCompartidas.Web.Controllers
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
+            return RedirectToAction("Login");
+        }
+
+        public IActionResult Registro()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Registro(Usuario usuario)
+        {
+            // Verificar que el email no esté en uso (opcional)
+            var existente = await _authService.ObtenerUsuarioPorEmailAsync(usuario.Email);
+            if (existente != null)
+            {
+                ViewBag.Error = "El email ya está registrado.";
+                return View();
+            }
+
+            await _authService.RegistrarAsync(usuario);
             return RedirectToAction("Login");
         }
     }

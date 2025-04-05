@@ -16,7 +16,7 @@ namespace RutasCompartidas.Api.Controllers
             _authService = authService;
         }
 
-        // 📌 Endpoint para iniciar sesión
+        // Endpoint para iniciar sesión
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UsuarioDto usuario)
         {

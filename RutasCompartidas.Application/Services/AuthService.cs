@@ -24,6 +24,18 @@ namespace RutasCompartidas.Application.Services
             return await _context.Usuarios
                 .FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
         }
+
+        public async Task<Usuario?> ObtenerUsuarioPorEmailAsync(string email)
+        {
+            return await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == email);
+        }
+
+        public async Task RegistrarAsync(Usuario usuario)
+        {
+            _context.Usuarios.Add(usuario);
+            await _context.SaveChangesAsync();
+        }
+
     }
 }
 

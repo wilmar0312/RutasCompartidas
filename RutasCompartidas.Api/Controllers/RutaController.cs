@@ -16,7 +16,7 @@ public class RutaController : ControllerBase
         _context = context;
     }
 
-    // 📌 Obtener todas las rutas
+    // Obtener todas las rutas
     [HttpGet("GetAll")]
     public async Task<IActionResult> GetAll(string filter = "")
     {
@@ -56,7 +56,7 @@ public class RutaController : ControllerBase
         return Ok(dto);
     }
 
-    // 📌 Crear una nueva ruta (Solo conductores)
+    // Crear una nueva ruta (Solo conductores)
     [HttpPost("Add")]
     public async Task<IActionResult> Create([FromBody] RutaDto dto)
     {
@@ -78,7 +78,7 @@ public class RutaController : ControllerBase
         return Ok(new { success = true, message = "Ruta creada con éxito!" });
     }
 
-    // 📌 Editar una ruta (Solo conductores)
+    // Editar una ruta (Solo conductores)
     [HttpPut("Update")]
     public async Task<IActionResult> Update([FromBody] RutaDto dto)
     {
@@ -110,7 +110,7 @@ public class RutaController : ControllerBase
         return Ok(new { success = true, message = "Ruta actualizada con éxito!" });
     }
 
-    // 📌 Eliminar una ruta (Solo conductores)
+    // Eliminar una ruta (Solo conductores)
     [HttpDelete("Delete/{id}")]
     public async Task<IActionResult> Delete(int id)
     {
