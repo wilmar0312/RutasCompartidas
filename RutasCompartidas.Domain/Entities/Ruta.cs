@@ -15,5 +15,7 @@ namespace RutasCompartidas.Domain.Entities
         public DateTime FechaHora { get; set; }
         public int ConductorId { get; set; } // ID del conductor
         public Usuario? Conductor { get; set; } // Relación con el usuario
+        public int CantidadPasajeros { get; set; } = 0;
+
     }
 }

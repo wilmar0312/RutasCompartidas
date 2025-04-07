@@ -1,26 +1,30 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RutasCompartidas.Application.Services;
 using RutasCompartidas.Domain.Entities;
+using RutasCompartidas.Infrastructure.Persistence; // Para AppDbContext
 
 namespace RutasCompartidas.Web.Controllers
 {
     public class RutaController : Controller
     {
         private readonly RutaService _rutaService;
+        private readonly AppDbContext _context;
 
-        public RutaController(RutaService rutaService)
+        public RutaController(RutaService rutaService, AppDbContext context)
         {
             _rutaService = rutaService;
+            _context = context;
         }
 
-        // Mostrar todas las rutas (para pasajero y conductor)
+        // Mostrar todas las rutas
         public async Task<IActionResult> Index()
         {
             var rutas = await _rutaService.ObtenerRutasAsync();
             return View(rutas);
         }
 
-        //Vista para crear una nueva ruta (Solo conductores)
+        // Vista para crear una nueva ruta (Solo conductores)
         public IActionResult Crear()
         {
             return View();
@@ -38,7 +42,7 @@ namespace RutasCompartidas.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        // Vista para editar una ruta (Solo conductores)
+        // Vista para editar una ruta
         public async Task<IActionResult> Editar(int id)
         {
             var ruta = await _rutaService.ObtenerRutaPorIdAsync(id);
@@ -54,10 +58,48 @@ namespace RutasCompartidas.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        // Eliminar una ruta (Solo conductores)
+        // Eliminar una ruta
         public async Task<IActionResult> Eliminar(int id)
         {
             await _rutaService.EliminarRutaAsync(id);
+            return RedirectToAction("Index");
+        }
+
+        // ----------------------
+        // FUNCIONES DE UNIR / SALIR
+        // ----------------------
+
+        [HttpPost]
+        public IActionResult Unirse(int id)
+        {
+            var ruta = _context.Rutas.Find(id);
+            if (ruta == null) return NotFound();
+
+            var yaUnido = HttpContext.Session.GetString($"Unido_{id}") == "true";
+            if (!yaUnido)
+            {
+                ruta.CantidadPasajeros++;
+                _context.SaveChanges();
+                HttpContext.Session.SetString($"Unido_{id}", "true");
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult Salir(int id)
+        {
+            var ruta = _context.Rutas.Find(id);
+            if (ruta == null) return NotFound();
+
+            var yaUnido = HttpContext.Session.GetString($"Unido_{id}") == "true";
+            if (yaUnido)
+            {
+                ruta.CantidadPasajeros = Math.Max(0, ruta.CantidadPasajeros - 1);
+                _context.SaveChanges();
+                HttpContext.Session.SetString($"Unido_{id}", "false");
+            }
+
             return RedirectToAction("Index");
         }
     }

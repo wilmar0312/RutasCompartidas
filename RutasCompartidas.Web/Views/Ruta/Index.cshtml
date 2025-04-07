@@ -1,37 +1,60 @@
 ﻿@model List<RutasCompartidas.Domain.Entities.Ruta>
 
+@{
+    var userRole = Context.Session.GetString("UserRole");
+    var userId = int.Parse(Context.Session.GetString("UserId") ?? "0");
+}
+
 <h2>Listado de Rutas</h2>
 
-<table>
-    <tr>
-        <th>Origen</th>
-        <th>Destino</th>
-        <th>Descripción</th>
-        <th>Fecha</th>
-        <th>Conductor</th>
-        <th>Acciones</th>
-    </tr>
-    @foreach (var ruta in Model)
-    {
+<table class="table">
+    <thead>
         <tr>
-            <td>@ruta.Origen</td>
-            <td>@ruta.Destino</td>
-            <td>@ruta.Descripcion</td>
-            <td>@ruta.FechaHora.ToString("dd/MM/yyyy HH:mm")</td>
-            <td>@(ruta.Conductor?.Nombre ?? "Desconocido")</td>
-            <td>
-                @if (Context.Session.GetString("UserRole") == "Conductor")
-                {
-                    <a href="/Ruta/Editar/@ruta.Id">Editar</a>
- 
-             <a href = "/Ruta/Eliminar/@ruta.Id" > Eliminar </a>
-               }
-            </td>
+            <th>Origen</th>
+            <th>Destino</th>
+            <th>Descripción</th>
+            <th>Fecha</th>
+            <th>Conductor</th>
+            <th>Pasajeros</th>
+            <th>Acciones</th>
         </tr>
-    }
+    </thead>
+    <tbody>
+        @foreach (var ruta in Model)
+        {
+            var sessionKey = $"Unido_{ruta.Id}";
+            var unido = Context.Session.GetString(sessionKey) == "true";
+
+            <tr>
+                <td>@ruta.Origen</td>
+                <td>@ruta.Destino</td>
+                <td>@ruta.Descripcion</td>
+                <td>@ruta.FechaHora.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@(ruta.Conductor?.Nombre ?? "Desconocido")</td>
+                <td>@ruta.CantidadPasajeros</td>
+                <td>
+                    @if (userRole == "Conductor" && ruta.ConductorId == userId)
+                    {
+                        <a href="/Ruta/Editar/@ruta.Id">Editar</a>
+ 
+                        <a href="/Ruta/Eliminar/@ruta.Id">Eliminar</a>
+                    }
+                    else if (userRole == "Pasajero")
+                    {
+                        <form method="post" asp-action="@(unido ? "Salir" : "Unirse")" asp-controller="Ruta" style="display:inline;">
+                            <input type="hidden" name="id" value="@ruta.Id" />
+                            <button type="submit" class="btn btn-sm btn-primary">
+                                @(unido ? "Salir" : "Unirse")
+                            </button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>
 
-@if (Context.Session.GetString("UserRole") == "Conductor")
+@if (userRole == "Conductor")
 {
-    <a href="/Ruta/Crear">Crear Nueva Ruta</a>
+    <a class="btn btn-success" href="/Ruta/Crear">Crear Nueva Ruta</a>
 }
