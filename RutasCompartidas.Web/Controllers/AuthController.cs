@@ -26,9 +26,10 @@ namespace RutasCompartidas.Web.Controllers
         {
             HttpContext.Session.SetString("UserId", user.Id.ToString());
             HttpContext.Session.SetString("UserRole", user.Rol);
+            HttpContext.Session.SetString("UserName", user.Nombre);
 
-            //  Si el usuario es Conductor, lo redirige a la página de gestión de rutas
-            if (user.Rol == "Conductor")
+                //  Si el usuario es Conductor, lo redirige a la página de gestión de rutas
+                if (user.Rol == "Conductor")
             {
                 return RedirectToAction("Index", "Ruta");
             }
