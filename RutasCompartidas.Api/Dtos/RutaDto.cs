@@ -11,9 +11,9 @@ namespace RutasCompartidas.Domain.Entities
         public int Id { get; set; }
         public string Origen { get; set; } = string.Empty;
         public string Destino { get; set; } = string.Empty;
-        public string Descripcion { get; set; } = string.Empty; // Información adicional
+        public string Descripcion { get; set; } = string.Empty;
         public DateTime FechaHora { get; set; }
-        public int ConductorId { get; set; } // ID del conductor
-        public UsuarioDto? Conductor { get; set; } // Relación con el usuario
+        public int ConductorId { get; set; }
+        public UsuarioDto? Conductor { get; set; }
     }
 }

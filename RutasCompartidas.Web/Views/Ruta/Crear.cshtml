@@ -1,19 +1,31 @@
 ﻿@model RutasCompartidas.Domain.Entities.Ruta
 
-<h2>Crear Ruta</h2>
+<h2 class="mb-4 text-center">Crear Nueva Ruta</h2>
 
-<form method="post">
-    <label>Origen:</label>
-    <input type="text" name="Origen" required />
+<div class="card shadow-sm p-4">
+    <form method="post">
+        <div class="mb-3">
+            <label class="form-label">Origen:</label>
+            <input type="text" name="Origen" required class="form-control" />
+        </div>
 
-    <label>Destino:</label>
-    <input type="text" name="Destino" required />
+        <div class="mb-3">
+            <label class="form-label">Destino:</label>
+            <input type="text" name="Destino" required class="form-control" />
+        </div>
 
-    <label>Descripción:</label>
-    <textarea name="Descripcion"></textarea>
+        <div class="mb-3">
+            <label class="form-label">Descripción:</label>
+            <textarea name="Descripcion" class="form-control"></textarea>
+        </div>
 
-    <label>Fecha y Hora:</label>
-    <input type="datetime-local" name="FechaHora" required />
+        <div class="mb-3">
+            <label class="form-label">Fecha y Hora:</label>
+            <input type="datetime-local" name="FechaHora" required class="form-control" />
+        </div>
 
-    <button type="submit">Guardar</button>
-</form>
+        <button type="submit" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Guardar
+        </button>
+    </form>
+</div>

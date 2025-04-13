@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using RutasCompartidas.Application.Services;
 using RutasCompartidas.Domain.Entities;
-using RutasCompartidas.Infrastructure.Persistence; // Para AppDbContext
+using RutasCompartidas.Infrastructure.Persistence;
 
 namespace RutasCompartidas.Web.Controllers
 {
@@ -17,14 +17,14 @@ namespace RutasCompartidas.Web.Controllers
             _context = context;
         }
 
-        // Mostrar todas las rutas
+        
         public async Task<IActionResult> Index()
         {
             var rutas = await _rutaService.ObtenerRutasAsync();
             return View(rutas);
         }
 
-        // Vista para crear una nueva ruta (Solo conductores)
+      
         public IActionResult Crear()
         {
             return View();
@@ -42,7 +42,7 @@ namespace RutasCompartidas.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        // Vista para editar una ruta
+       
         public async Task<IActionResult> Editar(int id)
         {
             var ruta = await _rutaService.ObtenerRutaPorIdAsync(id);
@@ -58,16 +58,14 @@ namespace RutasCompartidas.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        // Eliminar una ruta
+       
         public async Task<IActionResult> Eliminar(int id)
         {
             await _rutaService.EliminarRutaAsync(id);
             return RedirectToAction("Index");
         }
 
-        // ----------------------
-        // FUNCIONES DE UNIR / SALIR
-        // ----------------------
+        
 
         [HttpPost]
         public IActionResult Unirse(int id)

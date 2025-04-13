@@ -40,12 +40,10 @@ namespace RutasCompartidas.Application.Services
             var rutaExistente = await _context.Rutas.FindAsync(ruta.Id);
             if (rutaExistente != null)
             {
-                // Actualizar solo los campos que deben cambiar
                 rutaExistente.Origen = ruta.Origen;
                 rutaExistente.Destino = ruta.Destino;
                 rutaExistente.Descripcion = ruta.Descripcion;
                 rutaExistente.FechaHora = ruta.FechaHora;
-                // No modificamos rutaExistente.ConductorId
 
                 await _context.SaveChangesAsync();
             }

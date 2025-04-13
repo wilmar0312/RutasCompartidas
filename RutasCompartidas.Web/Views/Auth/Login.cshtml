@@ -9,17 +9,19 @@
     <p style="color:red">@ViewBag.Error</p>
 }
 
-<form method="post">
-    <label>Email:</label>
-    <input type="email" name="email" required />
-
-    <label>Contraseña:</label>
-    <input type="password" name="password" required />
-
-    <button type="submit">Ingresar</button>
+<form method="post" class="p-3 border rounded bg-light">
+    <div class="mb-3">
+        <label>Email</label>
+        <input type="email" name="email" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label>Contraseña</label>
+        <input type="password" name="password" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Ingresar</button>
 </form>
 
-<!-- 🔹 Agregamos el botón de "Registrar nueva cuenta" -->
+
 <p>
     ¿No tienes una cuenta?
     <a asp-controller="Auth" asp-action="Registro">Regístrate aquí</a>

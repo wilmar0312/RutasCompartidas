@@ -1,21 +1,33 @@
 ﻿@model RutasCompartidas.Domain.Entities.Ruta
 
-<h2>Editar Ruta</h2>
+<h2 class="mb-4 text-center">Editar Ruta</h2>
 
-<form method="post">
-    <input type="hidden" name="Id" value="@Model.Id" />
+<div class="card shadow-sm p-4">
+    <form method="post">
+        <input type="hidden" name="Id" value="@Model.Id" />
 
-    <label>Origen:</label>
-    <input type="text" name="Origen" value="@Model.Origen" required />
+        <div class="mb-3">
+            <label class="form-label">Origen:</label>
+            <input type="text" name="Origen" value="@Model.Origen" required class="form-control" />
+        </div>
 
-    <label>Destino:</label>
-    <input type="text" name="Destino" value="@Model.Destino" required />
+        <div class="mb-3">
+            <label class="form-label">Destino:</label>
+            <input type="text" name="Destino" value="@Model.Destino" required class="form-control" />
+        </div>
 
-    <label>Descripción:</label>
-    <textarea name="Descripcion">@Model.Descripcion</textarea>
+        <div class="mb-3">
+            <label class="form-label">Descripción:</label>
+            <textarea name="Descripcion" class="form-control">@Model.Descripcion</textarea>
+        </div>
 
-    <label>Fecha y Hora:</label>
-    <input type="datetime-local" name="FechaHora" value="@Model.FechaHora.ToString("yyyy-MM-ddTHH:mm")" required />
+        <div class="mb-3">
+            <label class="form-label">Fecha y Hora:</label>
+            <input type="datetime-local" name="FechaHora" value="@Model.FechaHora.ToString("yyyy-MM-ddTHH:mm")" required class="form-control" />
+        </div>
 
-    <button type="submit">Actualizar</button>
-</form>
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-save"></i> Actualizar
+        </button>
+    </form>
+</div>
