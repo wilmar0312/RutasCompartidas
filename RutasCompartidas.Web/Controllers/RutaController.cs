@@ -1,30 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using RutasCompartidas.Application.Services;
 using RutasCompartidas.Domain.Entities;
-using RutasCompartidas.Infrastructure.Persistence;
+using RutasCompartidas.Web.Services;
 
 namespace RutasCompartidas.Web.Controllers
 {
     public class RutaController : Controller
     {
-        private readonly RutaService _rutaService;
-        private readonly AppDbContext _context;
+        private readonly RutaApiService _rutaApiService;
 
-        public RutaController(RutaService rutaService, AppDbContext context)
+        public RutaController(RutaApiService rutaApiService)
         {
-            _rutaService = rutaService;
-            _context = context;
+            _rutaApiService = rutaApiService;
         }
 
-        
         public async Task<IActionResult> Index()
         {
-            var rutas = await _rutaService.ObtenerRutasAsync();
+            var rutas = await _rutaApiService.ObtenerRutasAsync();
             return View(rutas);
         }
 
-      
         public IActionResult Crear()
         {
             return View();
@@ -38,14 +32,13 @@ namespace RutasCompartidas.Web.Controllers
             if (ruta.ConductorId == 0)
                 return RedirectToAction("Login", "Auth");
 
-            await _rutaService.AgregarRutaAsync(ruta);
+            await _rutaApiService.CrearRutaAsync(ruta);
             return RedirectToAction("Index");
         }
 
-       
         public async Task<IActionResult> Editar(int id)
         {
-            var ruta = await _rutaService.ObtenerRutaPorIdAsync(id);
+            var ruta = await _rutaApiService.ObtenerRutaPorIdAsync(id);
             if (ruta == null) return NotFound();
 
             return View(ruta);
@@ -54,30 +47,28 @@ namespace RutasCompartidas.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Editar(Ruta ruta)
         {
-            await _rutaService.ActualizarRutaAsync(ruta);
+            await _rutaApiService.ActualizarRutaAsync(ruta);
             return RedirectToAction("Index");
         }
 
-       
         public async Task<IActionResult> Eliminar(int id)
         {
-            await _rutaService.EliminarRutaAsync(id);
+            await _rutaApiService.EliminarRutaAsync(id);
             return RedirectToAction("Index");
         }
 
         
-
         [HttpPost]
-        public IActionResult Unirse(int id)
+        public async Task<IActionResult> Unirse(int id)
         {
-            var ruta = _context.Rutas.Find(id);
+            var ruta = await _rutaApiService.ObtenerRutaPorIdAsync(id);
             if (ruta == null) return NotFound();
 
             var yaUnido = HttpContext.Session.GetString($"Unido_{id}") == "true";
             if (!yaUnido)
             {
                 ruta.CantidadPasajeros++;
-                _context.SaveChanges();
+                await _rutaApiService.ActualizarRutaAsync(ruta);
                 HttpContext.Session.SetString($"Unido_{id}", "true");
             }
 
@@ -85,16 +76,16 @@ namespace RutasCompartidas.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Salir(int id)
+        public async Task<IActionResult> Salir(int id)
         {
-            var ruta = _context.Rutas.Find(id);
+            var ruta = await _rutaApiService.ObtenerRutaPorIdAsync(id);
             if (ruta == null) return NotFound();
 
             var yaUnido = HttpContext.Session.GetString($"Unido_{id}") == "true";
             if (yaUnido)
             {
                 ruta.CantidadPasajeros = Math.Max(0, ruta.CantidadPasajeros - 1);
-                _context.SaveChanges();
+                await _rutaApiService.ActualizarRutaAsync(ruta);
                 HttpContext.Session.SetString($"Unido_{id}", "false");
             }
 
@@ -102,3 +93,4 @@ namespace RutasCompartidas.Web.Controllers
         }
     }
 }
+

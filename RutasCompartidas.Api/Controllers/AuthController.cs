@@ -5,8 +5,7 @@ using RutasCompartidas.Domain.Entities;
 namespace RutasCompartidas.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    
+    [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
         private readonly AuthService _authService;
@@ -16,24 +15,24 @@ namespace RutasCompartidas.Api.Controllers
             _authService = authService;
         }
 
-        
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] UsuarioDto usuario)
+        public async Task<IActionResult> Login([FromBody] Usuario model)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(new { message = "Datos inválidos" });
+            var user = await _authService.LoginAsync(model.Email, model.Password);
+            if (user == null) return Unauthorized("Credenciales inválidas");
 
-            var user = await _authService.LoginAsync(usuario.Email, usuario.Password);
-            if (user == null)
-                return Unauthorized(new { message = "Credenciales incorrectas" });
+            return Ok(user);
+        }
 
-            return Ok(new
-            {
-                user.Id,
-                user.Nombre,
-                user.Email,
-                user.Rol
-            });
+        [HttpPost("registro")]
+        public async Task<IActionResult> Registro([FromBody] Usuario usuario)
+        {
+            var existente = await _authService.ObtenerUsuarioPorEmailAsync(usuario.Email);
+            if (existente != null)
+                return Conflict("Este correo ya está registrado.");
+
+            await _authService.RegistrarAsync(usuario);
+            return Ok(usuario);
         }
     }
 }

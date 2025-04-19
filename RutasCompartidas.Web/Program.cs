@@ -1,6 +1,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using RutasCompartidas.Infrastructure.Persistence;
+using RutasCompartidas.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,7 @@ builder.Services.AddScoped<RutasCompartidas.Application.Services.AuthService>();
 // Registrar el servicio RutaService
 builder.Services.AddScoped<RutasCompartidas.Application.Services.RutaService>();
 
-// Configurar sesiones
+
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
@@ -23,6 +24,15 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+
+builder.Services.AddHttpClient("ApiRutas", client =>
+{
+    client.BaseAddress = new Uri("http://localhost:5018/api/");
+});
+
+builder.Services.AddScoped<RutasCompartidas.Web.Services.RutaApiService>();
+builder.Services.AddScoped<AuthApiService>();
 
 var app = builder.Build();
 

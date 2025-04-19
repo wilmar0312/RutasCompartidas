@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RutasCompartidas.Application.Services;
+using RutasCompartidas.Web.Services;
 using RutasCompartidas.Domain.Entities;
 
 namespace RutasCompartidas.Web.Controllers
 {
     public class AuthController : Controller
     {
-        private readonly AuthService _authService;
+        private readonly AuthApiService _authApiService;
 
-        public AuthController(AuthService authService)
+        public AuthController(AuthApiService authApiService)
         {
-            _authService = authService;
+            _authApiService = authApiService;
         }
 
         public IActionResult Login()
@@ -18,30 +18,22 @@ namespace RutasCompartidas.Web.Controllers
             return View();
         }
 
-      [HttpPost]
-    public async Task<IActionResult> Login(string email, string password)
-    {
-        var user = await _authService.LoginAsync(email, password);
-        if (user != null)
+        [HttpPost]
+        public async Task<IActionResult> Login(string email, string password)
         {
-            HttpContext.Session.SetString("UserId", user.Id.ToString());
-            HttpContext.Session.SetString("UserRole", user.Rol);
-            HttpContext.Session.SetString("UserName", user.Nombre);
-
-                //  Si el usuario es Conductor, lo redirige a la página de gestión de rutas
-                if (user.Rol == "Conductor")
+            var user = await _authApiService.LoginAsync(email, password);
+            if (user != null)
             {
+                HttpContext.Session.SetString("UserId", user.Id.ToString());
+                HttpContext.Session.SetString("UserRole", user.Rol);
+                HttpContext.Session.SetString("UserName", user.Nombre);
+
                 return RedirectToAction("Index", "Ruta");
             }
 
-            //  Si el usuario es Pasajero, lo redirige a ver las rutas disponibles
-            return RedirectToAction("Index", "Ruta");
+            ViewBag.Error = "Credenciales incorrectas";
+            return View();
         }
-
-        ViewBag.Error = "Credenciales incorrectas";
-        return View();
-    }
-
 
         public IActionResult Logout()
         {
@@ -57,15 +49,13 @@ namespace RutasCompartidas.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Registro(Usuario usuario)
         {
-            // Verificar que el email no esté en uso (opcional)
-            var existente = await _authService.ObtenerUsuarioPorEmailAsync(usuario.Email);
-            if (existente != null)
+            var error = await _authApiService.RegistroAsync(usuario);
+            if (error != null)
             {
-                ViewBag.Error = "El email ya está registrado.";
+                ViewBag.Error = error;
                 return View();
             }
 
-            await _authService.RegistrarAsync(usuario);
             return RedirectToAction("Login");
         }
     }

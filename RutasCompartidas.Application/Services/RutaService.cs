@@ -57,6 +57,7 @@ namespace RutasCompartidas.Application.Services
                 _context.Rutas.Remove(ruta);
                 await _context.SaveChangesAsync();
             }
+
         }
     }
 }
